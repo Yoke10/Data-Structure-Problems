@@ -1,0 +1,64 @@
+#include<iostream>
+using namespace std;
+int V,graph[100][100];
+
+bool isSafe(int path[],int pos,int v){
+    if(graph[path[pos-1]][v]==0) return false;
+
+    for(int i=0;i<pos;i++){
+        if(path[i]==v) return false;
+    }
+    return true;
+}
+
+
+
+bool hamilFind(int path[],int pos){
+    if(pos==V) return true;
+
+    for(int v=1;v<V;v++){
+        if(isSafe(path,pos,v)){
+            path[pos]=v;
+
+            if(hamilFind(path,pos+1)) return true;
+            path[pos]=-1;
+        }
+    }
+    return false;
+}
+
+int main(){
+    cin>>V;
+
+    for(int i=0;i<V;i++){
+        for(int j=0;j<V;j++){
+            cin>>graph[i][j];
+        }
+    }
+
+    
+
+    int path[V];
+
+    for(int i=0;i<V;i++){
+        path[i]=-1;
+    }
+
+    path[0]=0;
+
+
+
+    int ans=hamilFind(path,1);
+
+    if(ans){
+        for(int i=0;i<V;i++){
+            cout<<path[i]<<" ";
+        }
+        cout<<0<<" ";
+    }
+
+    else{
+        cout<<"No solution";
+    }
+
+}
