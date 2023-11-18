@@ -1,0 +1,81 @@
+#include<iostream>
+
+using namespace std;
+
+const int n=9;
+void printSoln(int board[n][n]){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cout<<board[i][j]<<"  ";
+        }
+        cout<<endl;
+        cout<<endl;
+    }
+}
+
+
+bool isSafe(int board[n][n],int row,int col,int num){
+    for(int i=0;i<n;i++){
+        if(board[row][i]==num || board[i][col]==num)
+        return false;
+    }
+
+    int startrow=row-row%3;
+    int startcol=col-col%3;
+
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            if(board[i+startrow][j+startcol]==num)
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
+
+bool solve(int board[n][n],int row,int col){
+    if(row==n-1 && col==n-1)
+    return true;
+
+    if(col==n){
+        row++;   
+        col=0;
+    }
+
+    if(board[row][col]>0){
+        return solve(board,row,col+1);
+        } 
+
+        for(int num=1;num<=9;num++){
+            if(isSafe(board,row,col,num)){
+                board[row][col]=num;
+
+                if(solve(board,row,col+1)){
+                    return true;
+                }
+            }
+
+        }
+    board[row][col]=0;
+        return false;
+}
+
+
+int main(){
+    int board[n][n];
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>board[i][j];
+        }
+    }
+
+    if(solve(board,0,0)){
+        printSoln(board);
+    }
+    else{
+        cout<<"No solution";
+    }
+}
