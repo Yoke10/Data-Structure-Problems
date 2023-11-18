@@ -1,0 +1,64 @@
+#include <iostream>
+using namespace std;
+int N,board[100][100];
+const int moves[8][2] = 
+{
+    {2, 1}, {1, 2},
+    {-1, 2}, {-2, 1},
+    {-2, -1}, {-1, -2},
+    {1, -2}, {2, -1}
+};
+bool isSafe(int x, int y) 
+{
+    return(x>=0 && y>=0 && x<N && y<N && board[x][y]==-1);    
+}
+void printSolution() 
+{
+    for (int i = 0; i < N; ++i) 
+    {
+        for (int j = 0; j < N; ++j) 
+        {
+            std::cout << board[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+bool solveKnightTour(int x, int y, int movei) {
+   if(movei==N*N){
+       return true;
+   }
+   for(int k=0;k<8;k++){
+       int next_x=x+moves[k][0];
+       int next_y=y+moves[k][1];
+       if(isSafe(next_x,next_y)){
+           board[next_x][next_y]=movei;
+           if(solveKnightTour(next_x,next_y,movei+1))
+           {
+               return true;
+           }
+           else{
+               board[next_x][next_y]=-1;
+           }
+       }
+   }
+   return false;
+}
+int main() {
+    cin>>N;
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            board[i][j] = -1;
+        }
+    }
+    int start_x = 0;
+    int start_y = 0;
+    board[start_x][start_y] = 0;
+    if (solveKnightTour(start_x, start_y, 1)) {
+        std::cout << "Solution exists: \n";
+        printSolution();
+    } 
+    else {
+        std::cout << "No solution exists.\n";
+    }
+    return 0;
+}
