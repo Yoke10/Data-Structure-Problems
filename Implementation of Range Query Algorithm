@@ -1,0 +1,50 @@
+#include<iostream>
+using namespace std;
+int n;
+int lookup[100][100];
+int arr[100];
+
+void preprocess(){
+    for(int i=0;i<n;i++){
+        lookup[i][i]=i;
+    }
+
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            if(arr[lookup[i][j-1]]<arr[j]){
+                lookup[i][j]=lookup[i][j-1];
+            }
+
+            else{
+                lookup[i][j]=j;
+            }
+        }
+    }
+}
+
+int main(){
+    cin>>n;
+
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+
+    preprocess();
+
+    // for(int i=0;i<n;i++){
+    //     for(int j=0;j<n;j++){
+    //         cout<<lookup[i][j]<<" ";
+
+    //     }
+    //     cout<<endl;
+    // }
+    int range;
+    cin>>range;
+
+    for(int i=0;i<range;i++){
+        int st,end;
+        cin>>st>>end;
+
+        cout<<st<<" "<<end<<" "<<arr[lookup[st][end]];
+    }
+}
